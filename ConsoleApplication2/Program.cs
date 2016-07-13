@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,21 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication2
 {
+
+    public abstract class 機器
+    {
+        protected string 製造者 { get; set; }
+        public 機器()
+        {
+
+        }
+        public 機器(string s)
+        {
+            製造者 = s;
+        }
+
+    }
+
     public enum 顏色
     {
         銀色,
@@ -24,6 +39,10 @@ namespace ConsoleApplication2
 
     class F22 : 飛機, I武器
     {
+        public F22()
+        {
+            製造者 = "洛克希德馬丁";
+        }
         public override 顏色 外殼顏色 { get; } = 顏色.灰色;
 
         public void 攻擊()
@@ -40,6 +59,10 @@ namespace ConsoleApplication2
 
     class M1A1戰車 : 車, I武器
     {
+        public M1A1戰車()
+        {
+            製造者 = "克萊斯勒";
+        }
         public void 攻擊()
         {
             Console.WriteLine("戰車攻擊方式是使用砲管發射砲彈");
@@ -62,176 +85,87 @@ namespace ConsoleApplication2
 
     class Program
     {
-
-
-        public static void 秀一下車庫裡面的東西能做什麼(奧迪R8[] 車庫)
+        private static void Main(string[] args)
         {
-            foreach (奧迪R8 車 in 車庫)
-            {
-                車.移動();
-                車.特殊功能();
-                車.顯示車籍資料();
-                Console.WriteLine();
-            }
-        }
 
-        public static void 秀一下通用車庫裡的東西能做什麼(List<車> 通用車庫)
-        {
-            foreach (車 車 in 通用車庫)
-            {
-                車.移動();
-
-                if (車 is 奧迪R8)
-                    (車 as 奧迪R8).特殊功能();
-
-                車.顯示車籍資料();
-                Console.WriteLine();
-            }
-        }
-
-        public static void 秀一下萬用倉庫理的東西能做什麼(ArrayList 萬用倉庫)
-        {
-            foreach (object 某個東西 in 萬用倉庫)
-            {
-                if (某個東西 is 車)
-                {
-                    var item = 某個東西 as 車;
-                    item.顯示車籍資料();
-                }
-                else if (某個東西 is 飛機)
-                {
-                    飛機 item = 某個東西 as 飛機;
-                    item.飛行();
-                }
-
-                Console.WriteLine();
-            }
-            //foreach (object 某個東西 in 萬用倉庫)
-            //{
-            //    if (某個東西 is I武器)
-            //    {
-            //        var item = 某個東西 as I武器;
-            //        Console.Write($"這是一台{item.GetType().Name},");
-            //        item.攻擊();
-            //    }
-            //}
-        }
-        public static void 秀一下有武器倉庫裡面物件都怎麼攻擊(I武器[] 武器倉庫)
-        {
-            Console.WriteLine("我不知道武器倉庫裡面裝的是什麼東西，但我知道它有實做I武器界面就一定會有攻擊的方法");    
-            foreach (I武器 某個東西 in 武器倉庫)
-            {
-                Console.Write($"這是一台{某個東西.GetType().Name},");
-                某個東西.攻擊();
-            }
-        }
-
-        public static 奧迪R8[] 給我一個裝滿奧迪R8的車庫()
-        {
             Random rand = new Random();
-            奧迪R8[] 車庫 = new 奧迪R8[5];
-            for (int i = 0; i < 車庫.Length; i++)
-            {
-                switch (rand.Next(0, 2))
-                {
-                    case 0:
-                        車庫[i] = 汽車工廠.建立車("奧迪R8") as 奧迪R8;
-                        break;
 
-                    case 1:
-                        車庫[i] = 汽車工廠.建立車("奧迪R8二代") as 奧迪R8二代;
-                        break;
-                }
-            }
-            return 車庫;
-        }
-        public static List<車> 給我一個裝滿車的通用車庫()
-        {
-            Random rand = new Random();
-            List<車> 通用車庫 = new List<車>();
-            for (int i = 0; i < 10; i++)
-            {
-                switch (rand.Next(0, 3))
-                {
-                    case 0:
-                        通用車庫.Add(汽車工廠.建立車("奧迪R8") as 奧迪R8);
-                        break;
-
-                    case 1:
-                        通用車庫.Add(汽車工廠.建立車("奧迪R8二代") as 奧迪R8二代);
-                        break;
-
-                    case 2:
-                        通用車庫.Add(汽車工廠.建立車("M1A1戰車") as M1A1戰車);
-                        break;
-                }
-            }
-            return 通用車庫;
-        }
-
-        public static ArrayList 給我一個裝滿萬物的萬用倉庫()
-        {
-            Random rand = new Random();
-            ArrayList 萬用倉庫 = new ArrayList();
+            倉庫<機器> 倉庫一號 = new 倉庫<機器>("雜貨商的倉庫");
+            
             for (int i = 0; i < 10; i++)
             {
                 switch (rand.Next(0, 5))
                 {
                     case 0:
-                        萬用倉庫.Add(汽車工廠.建立車("奧迪R8") as 奧迪R8);
+                        倉庫一號.放東西(汽車工廠.建立車("奧迪R8") as 奧迪R8);
                         break;
 
                     case 1:
-                        萬用倉庫.Add(汽車工廠.建立車("奧迪R8二代") as 奧迪R8二代);
+                        倉庫一號.放東西(汽車工廠.建立車("奧迪R8二代") as 奧迪R8二代);
                         break;
 
                     case 2:
-                        萬用倉庫.Add(汽車工廠.建立車("M1A1戰車") as M1A1戰車);
+                        倉庫一號.放東西(汽車工廠.建立車("M1A1戰車") as M1A1戰車);
                         break;
 
                     case 3:
-                        萬用倉庫.Add(飛機工廠.建立飛機("F22") as F22);
+                        倉庫一號.放東西(飛機工廠.建立飛機("F22") as F22);
                         break;
 
                     case 4:
-                        萬用倉庫.Add(飛機工廠.建立飛機("波音787") as 波音787);
+                        倉庫一號.放東西(飛機工廠.建立飛機("波音787") as 波音787);
                         break;
                 }
             }
-            return 萬用倉庫;
-        }
+            Console.WriteLine(倉庫一號.顯示名稱());
+            foreach (var 東西 in 倉庫一號)
+            {
+                Console.WriteLine($"這是一台{東西.GetType().Name}");
+            }
 
-        private static void Main(string[] args)
-        {
-            //奧迪R8 R8 = 汽車工廠.建立車("奧迪R8") as 奧迪R8;
-            //奧迪R8二代 R8二代 = 汽車工廠.建立車("奧迪R8二代") as 奧迪R8二代;
+            倉庫<車> 倉庫二號 = new 倉庫<車>("車的倉庫");
 
-            #region 用奧迪R8的型別操作所有的奧迪R8物件
-            //奧迪R8[] 車庫 = Program.給我一個裝滿奧迪R8的車庫();
-            //Program.秀一下車庫裡面的東西能做什麼(車庫);
-            #endregion
+            for (int i = 0; i < 10; i++)
+            {
+                switch (rand.Next(0, 3))
+                {
+                    case 0:
+                        倉庫二號.放東西(汽車工廠.建立車("奧迪R8") as 奧迪R8);
+                        break;
+                    case 1:
+                        倉庫二號.放東西(汽車工廠.建立車("奧迪R8二代") as 奧迪R8二代);
+                        break;
+                    case 2:
+                        倉庫二號.放東西(汽車工廠.建立車("M1A1戰車") as M1A1戰車);
+                        break;
+                }
+            }
+            Console.WriteLine(倉庫二號.顯示名稱());
+            foreach (var 東西 in 倉庫二號)
+            {
+                Console.WriteLine($"這是一台{東西.GetType().Name}");
+            }
 
-            #region 用車型別的型別操作所有的車物件，使用List容器
-            //List<車> 通用車庫 = Program.給我一個裝滿車的通用車庫();
-            //Program.秀一下通用車庫裡的東西能做什麼(通用車庫);
-            #endregion
+            跑車倉庫<奧迪R8> 倉庫三號 = new 跑車倉庫<奧迪R8>("奧迪R8跑車倉庫");
+            for (int i = 0; i < 10; i++)
+            {
+                switch (rand.Next(0, 2))
+                {
+                    case 0:
+                        倉庫三號.放東西(汽車工廠.建立車("奧迪R8") as 奧迪R8);
+                        break;
+                    case 1:
+                        倉庫三號.放東西(汽車工廠.建立車("奧迪R8二代") as 奧迪R8二代);
+                        break;
+                }
+            }
+            倉庫三號.排序();
+            Console.WriteLine(倉庫三號.顯示名稱());
+            foreach (var 東西 in 倉庫三號)
+            {
+                Console.WriteLine($"這是一台{東西.GetType().Name}    {東西.車牌號碼}");
+            }
 
-            //因為ArrayList這個容器裡面儲存的型別都是object，所以任何型別都能裝
-            //跟List<T>比較，List<T>會限定該泛型型別T或有is-a關係的型別
-            //ArrayList什麼東西都能裝，但是ArrayList使用前須轉型(因為他是object的情況下，你就只會知道他身為object的行為)
-            //效能上會比List<T>差(因為轉型是額外動作)，所以請考量實際容器裝的物件決定要用哪種容器
-            #region 使用ArrayList容器
-            //ArrayList 萬用倉庫 = Program.給我一個裝滿萬物的萬用倉庫();
-            //Program.秀一下萬用倉庫理的東西能做什麼(萬用倉庫);
-            #endregion
-            #region 多型使用interface界面操作範例
-            //I武器[] 武器倉庫 = new I武器[2]
-            //{
-            //    飛機工廠.建立飛機("F22") as I武器,
-            //    汽車工廠.建立車("M1A1戰車") as I武器
-            //};
-            //Program.秀一下有武器倉庫裡面物件都怎麼攻擊(武器倉庫);
-            #endregion
             Console.ReadKey();
         }
     }
@@ -290,7 +224,7 @@ namespace ConsoleApplication2
         }
     }
 
-    abstract class 車
+    abstract class 車 : 機器
     {
         public 引擎 引擎 { get; set; }
         public int 重量 { get; set; }
@@ -304,6 +238,11 @@ namespace ConsoleApplication2
 
     class 波音787 : 飛機
     {
+        public 波音787()
+        {
+            製造者 = "波音";
+        }
+
         public override void 飛行()
         {
             引擎.啟動引擎();
@@ -311,7 +250,7 @@ namespace ConsoleApplication2
         }
     }
 
-    abstract class 飛機
+    abstract class 飛機 : 機器
     {
         public 引擎 引擎 { get; set; }
         public virtual 顏色 外殼顏色 { get; } = 顏色.白色;
@@ -337,9 +276,18 @@ namespace ConsoleApplication2
         }
     }
 
-    class 奧迪R8 : 車
+    class 奧迪R8 : 車, IComparable<奧迪R8>
     {
+        public 奧迪R8()
+        {
+            製造者 = "奧迪";
+        }
         public string 車牌號碼 { get; } = Guid.NewGuid().ToString().Substring(0, 6).Insert(3, "-").ToUpper();
+
+        public int CompareTo(奧迪R8 other)
+        {
+            return string.Compare(this.車牌號碼,other.車牌號碼);
+        }
 
         public virtual void 特殊功能()
         {
@@ -378,4 +326,100 @@ namespace ConsoleApplication2
             Console.WriteLine();
         }
     }
+
+    public class 倉庫<T> : IEnumerable<T>
+    {
+        protected string 名稱;
+        protected int position;
+        protected T[] array = new T[256];
+
+        public void 放東西(T obj)
+        {
+            position++;
+            array[position] = obj;
+
+        }
+
+        public string 顯示名稱()
+        {
+            return 名稱;
+        }
+
+        public 倉庫(string s)
+        {
+            名稱 = s;
+            position = -1;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new 列舉者<T>(array, position);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+    }
+
+
+    public class 跑車倉庫<奧迪R8> : 倉庫<奧迪R8>
+    {
+        public 跑車倉庫(string s):base(s)
+        {
+        }
+
+        public void 排序()
+        {
+            Array.Sort<奧迪R8>(array,0,position+1);
+        }
+    }
+
+    class 列舉者<T> : IEnumerator<T>
+    {
+        T[] array;
+        int position;
+        int length;
+
+        public 列舉者(T[] p, int l)
+        {
+            position = -1;
+            array = p;
+            length = l;
+        }
+
+        public T Current
+        {
+            get
+            {
+                return array[position];
+            }
+        }
+
+        object IEnumerator.Current
+        {
+            get
+            {
+                return array[position];
+            }
+        }
+
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
+        }
+
+        public bool MoveNext()
+        {
+            position++;
+            return position <= length;
+        }
+
+        public void Reset()
+        {
+            position = -1;
+        }
+    }
+
+
 }
